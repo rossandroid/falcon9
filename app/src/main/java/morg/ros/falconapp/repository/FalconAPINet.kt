@@ -6,7 +6,9 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
-object FalconAPINet {
+object FalconAPINet:IFalconAPINet {
+
+
     private val base_url = "https://api.spacexdata.com"
 
 
@@ -19,6 +21,7 @@ object FalconAPINet {
     private var falconAPI = rf.create(FalconAPIService::class.java)
 
 
+    override
     fun search(): Flowable<List<ApiClasses.Rocket>> = falconAPI.search()
 
 }

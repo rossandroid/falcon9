@@ -6,7 +6,7 @@ public class ApiClasses {
             var mission_name: String,
             var launch_date_utc: String,
             var launch_success: Boolean,
-            var link: Link
+            var links: Link
     )
 
     data class Link(
