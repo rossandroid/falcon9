@@ -5,6 +5,11 @@ import morg.ros.falconapp.model.ApiClasses
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import org.reactivestreams.Subscriber
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+
+
 
 object FalconAPINet:IFalconAPINet {
 
@@ -24,4 +29,16 @@ object FalconAPINet:IFalconAPINet {
     override
     fun search(): Flowable<List<ApiClasses.Rocket>> = falconAPI.search()
 
+    override
+    fun search(iService:IService) {
+        search().subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.newThread())
+                .subscribe(
+                        {
+                            iService.onSuccess(it)
+                        },
+                        {
+                            iService.onError(it.localizedMessage)
+                        })
+    }
 }
