@@ -7,6 +7,8 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
 import morg.ros.falconapp.model.ApiClasses
+import morg.ros.falconapp.presenter.IMainPresenter
+import morg.ros.falconapp.presenter.MainPresenter
 
 class MainActivity : AppCompatActivity() , IMainPresenter {
 
