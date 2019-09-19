@@ -1,16 +1,13 @@
 package morg.ros.falconapp
 
-import android.content.Intent
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_list.view.*
-import morg.ros.falconapp.R.id.patch
 import morg.ros.falconapp.model.ApiClasses
 import java.text.SimpleDateFormat
-import java.time.LocalDate
 import java.util.*
 
 class MainAdapter constructor(var rocketList: List<ApiClasses.Rocket>) :
@@ -27,11 +24,11 @@ class MainAdapter constructor(var rocketList: List<ApiClasses.Rocket>) :
         val actualRocket = rocketList[pos]
         holder.itemView.mission.text = actualRocket.mission_name
 
+        // display status image
         if(actualRocket.launch_success)
             holder.itemView.imageSuccess.setImageResource(R.drawable.mission_ok)
         else
             holder.itemView.imageSuccess.setImageResource(R.drawable.mission_failed)
-
 
         // format data
         val sdf = java.text.SimpleDateFormat("yyyy-MM-dd")
@@ -41,11 +38,14 @@ class MainAdapter constructor(var rocketList: List<ApiClasses.Rocket>) :
         holder.itemView.date.text = sdf.format(result)
 
 
-        Picasso
-        .get()
-        .load(actualRocket?.links?.mission_patch)
-        .placeholder(R.drawable.ic_error)
-        .resize(100,100)
-        .into(holder.itemView.patch)
+        // display mission patch
+        Picasso.get()
+                .load(actualRocket?.links?.mission_patch)
+                .placeholder(R.drawable.ic_star_black_24dp)
+                .error(R.drawable.ic_error)
+                .fit()
+                .centerCrop()
+                .into(holder.itemView.patch)
+
     }
 }

@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
+import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
 import morg.ros.falconapp.model.ApiClasses
 
@@ -30,19 +31,29 @@ class MainActivity : AppCompatActivity() , IMainPresenter {
     }
 
     override fun showSpinner() {
-     }
+        recycleView.setVisibility(View.GONE)
+        spinner.visibility = View.VISIBLE
+        textSpinner.visibility = View.GONE
+
+    }
 
     override fun hideSpinner() {
+        recycleView.setVisibility(View.VISIBLE)
+        spinner.visibility = View.GONE
+        textSpinner.visibility = View.GONE
     }
 
     override fun hideSpinnerWithError(Error: String) {
+        recycleView.setVisibility(View.GONE)
+        spinner.visibility = View.GONE
+        textSpinner.text=Error
+        textSpinner.visibility = View.VISIBLE
     }
 
     override fun updateAdapter(list: List<ApiClasses.Rocket>) {
         //arrayList = list
         mAdapter = MainAdapter(list)
         recycleView.setAdapter(mAdapter);
-
-
     }
+
 }
