@@ -32,7 +32,7 @@ object FalconAPINet:IFalconAPINet {
     override
     fun search(iService:IService) {
         search().subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         {
                             iService.onSuccess(it)
