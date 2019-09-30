@@ -5,17 +5,16 @@ import morg.ros.falconapp.model.ApiClasses
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import org.reactivestreams.Subscriber
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-
+import morg.ros.falconapp.presenter.IMainPresenter
 
 
 object FalconAPINet:IFalconAPINet {
 
 
     private val base_url = "https://api.spacexdata.com"
-
+    private var miMainPresenter: IMainPresenter? = null
 
     val rf = Retrofit.Builder()
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
@@ -26,19 +25,26 @@ object FalconAPINet:IFalconAPINet {
     private var falconAPI = rf.create(FalconAPIService::class.java)
 
 
-    override
-    fun search(): Flowable<List<ApiClasses.Rocket>> = falconAPI.search()
+    override fun setService(iMainPresenter: IMainPresenter) {
+        miMainPresenter=iMainPresenter
+    }
 
     override
-    fun search(iService:IService) {
-        search().subscribeOn(Schedulers.io())
+    fun get(query:String): Flowable<List<ApiClasses.Rocket>> = falconAPI.search(query)
+
+    override
+    fun search(query:String) {
+        get(query)
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         {
-                            iService.onSuccess(it)
+                            miMainPresenter!!.onSuccess(it)
                         },
                         {
-                            iService.onError(it.localizedMessage)
+                            miMainPresenter!!.onError(it.message.toString())
                         })
-    }
+            }
+
+
 }

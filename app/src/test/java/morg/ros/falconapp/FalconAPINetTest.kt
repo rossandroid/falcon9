@@ -4,8 +4,7 @@ import com.nhaarman.mockitokotlin2.whenever
 import io.reactivex.Flowable
 import io.reactivex.subscribers.TestSubscriber
 import morg.ros.falconapp.model.ApiClasses
-import morg.ros.falconapp.repository.FalconAPINet
-import morg.ros.falconapp.repository.FalconAPIService
+import morg.ros.falconapp.repository.IFalconAPINet
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
@@ -20,37 +19,20 @@ import org.junit.Assert.*
 class FalconAPINetTest {
 
     @Mock
-    lateinit var mockFalconAPIService : FalconAPIService
+    lateinit var falconRepo : IFalconAPINet
 
     @Before
     fun setUp(){
         MockitoAnnotations.initMocks(this)
-    }
 
-    @Test
-    fun test_get_list_rockets_from_server_and_test_type() {
-        var ts : TestSubscriber<List<ApiClasses.Rocket>> = TestSubscriber<List<ApiClasses.Rocket>>()
-        FalconAPINet.search().subscribe(ts)
-        ts.awaitTerminalEvent()
-        ts.assertComplete()
-        ts.assertNoErrors()
-        ts.assertValueCount(1)
-        var listRockets : List<ApiClasses.Rocket> = ts.values()[0]
-        assertTrue(listRockets[0].mission_name is String)
-        //...
     }
 
     @Test
     fun test_get_fake_list_rockets_and_test_data() {
-
-        //given
-        whenever(mockFalconAPIService.search()).thenReturn(Flowable.just(getFakeRocketList()))
-
-        //when
         var ts : TestSubscriber<List<ApiClasses.Rocket>> = TestSubscriber<List<ApiClasses.Rocket>>()
 
-        //then
-        mockFalconAPIService.search().subscribe(ts)
+        whenever(falconRepo.get("falcon9")).thenReturn(Flowable.just(getFakeRocketList()))
+        falconRepo.get("falcon9").subscribe(ts)
 
         ts.awaitTerminalEvent()
         ts.assertComplete()
@@ -60,7 +42,6 @@ class FalconAPINetTest {
         var listRockets : List<ApiClasses.Rocket> = ts.values()[0]
         assertEquals(listRockets.size, 1)
         assertEquals(listRockets[0].mission_name, "Falcon 9")
-        //...
     }
 
     fun getFakeRocketList() : List<ApiClasses.Rocket>{

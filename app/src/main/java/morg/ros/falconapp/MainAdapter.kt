@@ -1,6 +1,6 @@
 package morg.ros.falconapp
 
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,18 +9,21 @@ import kotlinx.android.synthetic.main.item_list.view.*
 import morg.ros.falconapp.model.ApiClasses
 import java.text.SimpleDateFormat
 import java.util.*
+import android.app.Activity
+
+
 
 class MainAdapter constructor(var rocketList: List<ApiClasses.Rocket>) :
-        RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+        androidx.recyclerview.widget.RecyclerView.Adapter<androidx.recyclerview.widget.RecyclerView.ViewHolder>() {
 
-    internal class ViewHolder(view: View) : RecyclerView.ViewHolder(view)
+    internal class ViewHolder(view: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view)
 
-    override fun onCreateViewHolder(p0: ViewGroup, p1: Int): RecyclerView.ViewHolder =
+    override fun onCreateViewHolder(p0: ViewGroup, p1: Int): androidx.recyclerview.widget.RecyclerView.ViewHolder =
             ViewHolder(LayoutInflater.from(p0.context).inflate(R.layout.item_list, p0, false))
 
     override fun getItemCount(): Int = rocketList.size
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, pos: Int) {
+    override fun onBindViewHolder(holder: androidx.recyclerview.widget.RecyclerView.ViewHolder, pos: Int) {
         val actualRocket = rocketList[pos]
         holder.itemView.mission.text = actualRocket.mission_name
 
@@ -36,7 +39,6 @@ class MainAdapter constructor(var rocketList: List<ApiClasses.Rocket>) :
         formatter.timeZone = TimeZone.getTimeZone("UTC")
         val result = formatter.parse(actualRocket.launch_date_utc)
         holder.itemView.date.text = sdf.format(result)
-
 
         // display mission patch
         Picasso.get()

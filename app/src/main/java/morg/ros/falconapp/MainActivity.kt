@@ -1,21 +1,18 @@
 package morg.ros.falconapp
 
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v7.widget.DefaultItemAnimator
-import android.support.v7.widget.LinearLayoutManager
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
 import morg.ros.falconapp.model.ApiClasses
-import morg.ros.falconapp.presenter.IMainPresenter
 import morg.ros.falconapp.presenter.MainPresenter
 
-class MainActivity : AppCompatActivity() , IMainPresenter {
+class MainActivity : AppCompatActivity() , IMainActivity {
 
     var presenterImplementation: MainPresenter? = null
-//    var linearLayoutManager: LinearLayoutManager? = null
     var mAdapter: MainAdapter? = null
-//    var arrayList: List<ApiClasses.Rocket>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,11 +21,11 @@ class MainActivity : AppCompatActivity() , IMainPresenter {
         recycleView.layoutManager= LinearLayoutManager(this)
 
         recycleView.setHasFixedSize(true)
-        recycleView.setItemAnimator(DefaultItemAnimator())
+        recycleView.setItemAnimator(androidx.recyclerview.widget.DefaultItemAnimator())
         recycleView.setFitsSystemWindows(true)
 
         presenterImplementation = MainPresenter(this)
-        presenterImplementation!!.getRocketList()
+        presenterImplementation!!.getRocketList("falcon9")
 
     }
 
@@ -36,7 +33,6 @@ class MainActivity : AppCompatActivity() , IMainPresenter {
         recycleView.setVisibility(View.GONE)
         spinner.visibility = View.VISIBLE
         textSpinner.visibility = View.GONE
-
     }
 
     override fun hideSpinner() {
@@ -53,7 +49,6 @@ class MainActivity : AppCompatActivity() , IMainPresenter {
     }
 
     override fun updateAdapter(list: List<ApiClasses.Rocket>) {
-        //arrayList = list
         mAdapter = MainAdapter(list)
         recycleView.setAdapter(mAdapter);
     }
